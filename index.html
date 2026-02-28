@@ -74,11 +74,22 @@
             font-weight: bold;
             transition: transform 0.3s, box-shadow 0.3s;
             display: inline-block;
+            font-size: 1.2em;
         }
         
         .download-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .download-btn i {
+            margin-right: 10px;
+        }
+        
+        .file-info {
+            margin-top: 15px;
+            font-size: 0.9em;
+            opacity: 0.8;
         }
         
         .changelog {
@@ -141,20 +152,23 @@
         <div class="download-section">
             <div class="version-info">
                 <div>
-                    <span class="version-badge">Текущая версия: 1.0.0.0</span>
-                    <span style="margin-left: 15px;">Дата выпуска: 28.02.2026</span>
+                    <span class="version-badge" id="version-badge">Текущая версия: 1.0.0.0</span>
+                    <span style="margin-left: 15px;" id="release-date">Дата выпуска: 28.02.2026</span>
                 </div>
                 <div>
-                    <a href="https://drive.google.com/uc?export=download&id=1mPPewBzCDfHD5qX7UUUwmIJ4rtqPl0Bj" class="download-btn" id="downloadBtn">
-                        📥 Скачать SkyOS (74 МБ)
+                    <a href="https://drive.google.com/uc?export=download&id=1-ByqkmGNamah_1u5z3k8fz0dYbEqcmTi" class="download-btn" id="downloadBtn">
+                        <i>📥</i> Скачать SkyOS
                     </a>
                 </div>
+            </div>
+            <div class="file-info" id="file-info">
+                Размер: 265 МБ | Версия: 1.0.0.0 | Платформа: Windows 7+
             </div>
         </div>
         
         <div class="changelog">
-            <h2>📋 Что нового в версии 1.0.0.0</h2>
-            <ul>
+            <h2>📋 Что нового в версии <span id="changelog-version">1.0.0.0</span></h2>
+            <ul id="changelog-list">
                 <li>✨ Полноценный рабочий стол с перетаскиванием иконок</li>
                 <li>🌐 Встроенный браузер на Chromium (через VLC)</li>
                 <li>🎬 Медиаплеер с поддержкой всех популярных форматов</li>
@@ -197,24 +211,6 @@
             </div>
         </div>
         
-        <div style="background: rgba(0, 0, 0, 0.2); border-radius: 10px; padding: 30px; margin-bottom: 30px;">
-            <h2 style="margin-bottom: 20px;">📊 Статистика загрузок</h2>
-            <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px;">
-                <div style="text-align: center;">
-                    <div style="font-size: 2em; font-weight: bold;" id="downloads">10 000+</div>
-                    <div>Всего загрузок</div>
-                </div>
-                <div style="text-align: center;">
-                    <div style="font-size: 2em; font-weight: bold;" id="users">5 000+</div>
-                    <div>Активных пользователей</div>
-                </div>
-                <div style="text-align: center;">
-                    <div style="font-size: 2em; font-weight: bold;" id="rating">4.8/5</div>
-                    <div>Рейтинг</div>
-                </div>
-            </div>
-        </div>
-        
         <footer>
             <p>© 2026 SkyTechnology. Все права защищены.</p>
             <p style="margin-top: 10px;">SkyOS распространяется бесплатно с открытым исходным кодом</p>
@@ -222,27 +218,11 @@
     </div>
     
     <script>
-        // Версия для обновлений (будет читаться SkyOS)
+        // Данные о версии для обновлений
         window.currentVersion = "1.0.0.0";
-        window.downloadUrl = "https://drive.google.com/uc?export=download&id=1mPPewBzCDfHD5qX7UUUwmIJ4rtqPl0Bj";
-        
-        // Простая анимация счётчиков
-        function animateCounter(element, target) {
-            let current = 0;
-            let increment = target / 100;
-            let timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    element.textContent = target.toLocaleString() + '+';
-                    clearInterval(timer);
-                } else {
-                    element.textContent = Math.floor(current).toLocaleString() + '+';
-                }
-            }, 20);
-        }
-        
-        animateCounter(document.getElementById('downloads'), 10000);
-        animateCounter(document.getElementById('users'), 5000);
+        window.downloadUrl = "https://drive.google.com/uc?export=download&id=1-ByqkmGNamah_1u5z3k8fz0dYbEqcmTi";
+        window.releaseDate = "28.02.2026";
+        window.fileSize = "265 МБ";
     </script>
 </body>
 </html>
