@@ -1,8 +1,8 @@
 {
   "version": "1.0.0.3",
   "download_url": "https://drive.google.com/uc?export=download&id=1soofRKNLAKsKXhdHiogmB_2E4mMpwaLP",
-  "release_date": "01.03.2026", // Укажите сегодняшнюю дату
-  "file_size": "265 МБ",         // Замените на реальный размер файла
+  "release_date": "01.03.2026", 
+  "file_size": "265 МБ",        
   "platform": "Windows 7+",
   "changelog": [
     "Исправлена ошибка создания иконок рабочего стола",
