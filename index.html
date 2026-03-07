@@ -30,7 +30,6 @@
             flex: 1;
         }
 
-        /* Заголовок с эффектом стекла */
         header {
             text-align: center;
             padding: 3rem 1.5rem;
@@ -64,7 +63,6 @@
             margin: 0 auto;
         }
 
-        /* Блок загрузки */
         .download-section {
             background: rgba(20, 30, 50, 0.6);
             backdrop-filter: blur(12px);
@@ -158,7 +156,6 @@
             border-radius: 40px;
         }
 
-        /* Что нового */
         .changelog {
             background: rgba(10, 20, 30, 0.7);
             backdrop-filter: blur(8px);
@@ -214,7 +211,6 @@
             filter: drop-shadow(0 0 5px #9d4edd);
         }
 
-        /* Сетка возможностей */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -262,7 +258,6 @@
             filter: drop-shadow(0 4px 10px #4a6cf7);
         }
 
-        /* Блок спонсора */
         .sponsor-block {
             background: rgba(30, 40, 60, 0.6);
             backdrop-filter: blur(8px);
@@ -303,7 +298,6 @@
             box-shadow: 0 10px 25px #f09b22;
         }
 
-        /* Счётчик скачиваний */
         .counter-block {
             margin: 30px auto;
             max-width: 600px;
@@ -342,7 +336,6 @@
             color: rgba(255, 255, 255, 0.3);
         }
 
-        /* Анимации */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -354,7 +347,6 @@
             }
         }
 
-        /* Адаптивность */
         @media (max-width: 700px) {
             .version-info {
                 flex-direction: column;
@@ -399,10 +391,10 @@
             <span class="sponsor-text">Благодарим за поддержку и новый домен!</span>
         </div>
 
-        <!-- Счётчик скачиваний (серверный) -->
+        <!-- Счётчик скачиваний (облачный) -->
         <div class="counter-block">
             <span class="counter-text">⬇️ Всего скачиваний SkyOS:</span>
-            <span class="counter-number" id="download-counter">15</span>
+            <span class="counter-number" id="download-counter">...</span>
         </div>
 
         <div class="download-section">
@@ -491,54 +483,44 @@
         </footer>
     </div>
 
-    <!-- Скрипт для счётчика (серверный вариант) -->
+    <!-- Скрипт для облачного счётчика (ваш URL) -->
     <script>
+        const API_URL = 'https://skyoscounter.onrender.com/api/counter';
+
         async function fetchCounter() {
             try {
-                const response = await fetch('/counter.php?action=get');
-                const count = await response.text();
-                document.getElementById('download-counter').textContent = count;
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error('Ошибка сети');
+                const data = await response.json();
+                document.getElementById('download-counter').textContent = data.count;
             } catch (e) {
-                console.error('Ошибка получения счётчика', e);
-                // Если сервер не отвечает, оставляем стартовое значение 15
+                console.error('Ошибка получения счетчика:', e);
+                document.getElementById('download-counter').textContent = '15'; // fallback
             }
         }
 
         async function incrementCounter() {
             try {
-                const response = await fetch('/counter.php?action=increment');
-                const count = await response.text();
-                document.getElementById('download-counter').textContent = count;
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (!response.ok) throw new Error('Ошибка увеличения');
+                const data = await response.json();
+                document.getElementById('download-counter').textContent = data.count;
             } catch (e) {
-                console.error('Ошибка увеличения счётчика', e);
+                console.error('Ошибка увеличения счетчика:', e);
+                let current = parseInt(document.getElementById('download-counter').textContent) || 15;
+                current++;
+                document.getElementById('download-counter').textContent = current;
             }
         }
 
-        // Загружаем текущее значение при старте
         fetchCounter();
 
-        // Обработка клика по кнопке скачивания
         document.getElementById('download-link').addEventListener('click', function(e) {
-            // Даём время на открытие ссылки, потом увеличиваем счётчик
             setTimeout(incrementCounter, 500);
         });
-
-        // Альтернативный локальный счётчик (закомментирован) — используйте, если нет PHP
-        /*
-        let localCount = localStorage.getItem('skyos_download_count');
-        if (!localCount) {
-            localCount = 15; // Стартовое значение (тесты друзей)
-        } else {
-            localCount = parseInt(localCount);
-        }
-        document.getElementById('download-counter').textContent = localCount;
-
-        document.getElementById('download-link').addEventListener('click', function() {
-            localCount++;
-            localStorage.setItem('skyos_download_count', localCount);
-            document.getElementById('download-counter').textContent = localCount;
-        });
-        */
     </script>
 </body>
 </html>
