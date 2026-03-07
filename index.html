@@ -303,6 +303,31 @@
             box-shadow: 0 10px 25px #f09b22;
         }
 
+        /* Счётчик скачиваний */
+        .counter-block {
+            margin: 30px auto;
+            max-width: 600px;
+            text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        .counter-text {
+            color: #a0d0ff;
+            font-size: 1.3rem;
+        }
+
+        .counter-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-left: 10px;
+            background: linear-gradient(135deg, #a8ede0, #fed6e3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         footer {
             text-align: center;
             padding: 2rem 0 1rem;
@@ -354,6 +379,9 @@
                 gap: 1rem;
                 text-align: center;
             }
+            .counter-block {
+                margin: 20px;
+            }
         }
     </style>
 </head>
@@ -371,6 +399,12 @@
             <span class="sponsor-text">Благодарим за поддержку и новый домен!</span>
         </div>
 
+        <!-- Счётчик скачиваний (серверный) -->
+        <div class="counter-block">
+            <span class="counter-text">⬇️ Всего скачиваний SkyOS:</span>
+            <span class="counter-number" id="download-counter">15</span>
+        </div>
+
         <div class="download-section">
             <div class="version-info">
                 <div>
@@ -378,7 +412,7 @@
                     <span class="release-date" id="release-date">07.03.2026</span>
                 </div>
                 <div>
-                    <a href="https://drive.google.com/uc?export=download&id=1hRA9dWwCcKFZ7abIvmpbfztf26LuPdTI" class="download-btn">
+                    <a href="https://drive.google.com/uc?export=download&id=1hRA9dWwCcKFZ7abIvmpbfztf26LuPdTI" class="download-btn" id="download-link">
                         <i>📥</i> Скачать
                     </a>
                 </div>
@@ -457,11 +491,54 @@
         </footer>
     </div>
 
+    <!-- Скрипт для счётчика (серверный вариант) -->
     <script>
-        window.currentVersion = "1.0.0.4";
-        window.downloadUrl = "https://drive.google.com/uc?export=download&id=1hRA9dWwCcKFZ7abIvmpbfztf26LuPdTI";
-        window.releaseDate = "07.03.2026";
-        window.fileSize = "265 МБ";
+        async function fetchCounter() {
+            try {
+                const response = await fetch('/counter.php?action=get');
+                const count = await response.text();
+                document.getElementById('download-counter').textContent = count;
+            } catch (e) {
+                console.error('Ошибка получения счётчика', e);
+                // Если сервер не отвечает, оставляем стартовое значение 15
+            }
+        }
+
+        async function incrementCounter() {
+            try {
+                const response = await fetch('/counter.php?action=increment');
+                const count = await response.text();
+                document.getElementById('download-counter').textContent = count;
+            } catch (e) {
+                console.error('Ошибка увеличения счётчика', e);
+            }
+        }
+
+        // Загружаем текущее значение при старте
+        fetchCounter();
+
+        // Обработка клика по кнопке скачивания
+        document.getElementById('download-link').addEventListener('click', function(e) {
+            // Даём время на открытие ссылки, потом увеличиваем счётчик
+            setTimeout(incrementCounter, 500);
+        });
+
+        // Альтернативный локальный счётчик (закомментирован) — используйте, если нет PHP
+        /*
+        let localCount = localStorage.getItem('skyos_download_count');
+        if (!localCount) {
+            localCount = 15; // Стартовое значение (тесты друзей)
+        } else {
+            localCount = parseInt(localCount);
+        }
+        document.getElementById('download-counter').textContent = localCount;
+
+        document.getElementById('download-link').addEventListener('click', function() {
+            localCount++;
+            localStorage.setItem('skyos_download_count', localCount);
+            document.getElementById('download-counter').textContent = localCount;
+        });
+        */
     </script>
 </body>
 </html>
