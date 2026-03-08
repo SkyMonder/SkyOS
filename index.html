@@ -331,9 +331,12 @@
             margin-top: 3rem;
         }
 
-        footer p:last-child {
-            margin-top: 0.5rem;
-            color: rgba(255, 255, 255, 0.3);
+        footer a {
+            color: #a0d0ff;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
         }
 
         @keyframes fadeInUp {
@@ -404,7 +407,6 @@
                     <span class="release-date" id="release-date">08.03.2026</span>
                 </div>
                 <div>
-                    <!-- Прямая ссылка на Google Drive (последняя сборка) -->
                     <a href="https://drive.google.com/uc?export=download&id=1Swsv3Whg1QH_AmootO_7D3RELKYIQ_cN" class="download-btn" id="download-link">
                         <i>📥</i> Скачать
                     </a>
@@ -480,7 +482,10 @@
 
         <footer>
             <p>© 2026 SkyTechnology. Все права защищены.</p>
-            <p>SkyOS — свободная операционная система с открытым исходным кодом</p>
+            <p style="margin-top: 10px;">
+                <a href="/privacy.html">Политика конфиденциальности</a> | <a href="/terms.html">Условия использования</a>
+            </p>
+            <p style="margin-top: 5px; color: rgba(255, 255, 255, 0.3);">SkyOS — свободная операционная система с открытым исходным кодом</p>
         </footer>
     </div>
 
