@@ -391,7 +391,7 @@
             <span class="sponsor-text">Благодарим за поддержку и новый домен!</span>
         </div>
 
-        <!-- Счётчик скачиваний -->
+        <!-- Счётчик скачиваний (CounterAPI) -->
         <div class="counter-block">
             <span class="counter-text">⬇️ Всего скачиваний SkyOS:</span>
             <span class="counter-number" id="download-counter">0</span>
@@ -401,10 +401,11 @@
             <div class="version-info">
                 <div>
                     <span class="version-badge" id="version-badge">Версия 1.0.0.4</span>
-                    <span class="release-date" id="release-date">07.03.2026</span>
+                    <span class="release-date" id="release-date">08.03.2026</span>
                 </div>
                 <div>
-                    <a href="https://drive.google.com/uc?export=download&id=1hRA9dWwCcKFZ7abIvmpbfztf26LuPdTI" class="download-btn" id="download-link">
+                    <!-- Прямая ссылка на Google Drive (последняя сборка) -->
+                    <a href="https://drive.google.com/uc?export=download&id=1Swsv3Whg1QH_AmootO_7D3RELKYIQ_cN" class="download-btn" id="download-link">
                         <i>📥</i> Скачать
                     </a>
                 </div>
@@ -419,9 +420,9 @@
         <div class="changelog">
             <h2>📋 Что нового в версии 1.0.0.4</h2>
             <ul>
+                <li>Исправлена ошибка создания нового пользователя (кнопка теперь работает)</li>
                 <li>Браузер: исправлено автоматическое сохранение файлов (без диалога)</li>
                 <li>Менеджер загрузок: исправлена ошибка автообновления</li>
-                <li>Создание нового пользователя: исправлена ошибка с пропавшей кнопкой</li>
                 <li>Изоляция пользовательских папок (каждый пользователь имеет свою директорию)</li>
                 <li>Менеджер ярлыков (.sklnk) для файлов, папок и веб-ссылок</li>
                 <li>Браузер полностью вынесен в отдельный процесс – никаких зависаний</li>
@@ -483,16 +484,13 @@
         </footer>
     </div>
 
-    <!-- Единый скрипт для работы счётчика CounterAPI -->
+    <!-- Скрипт для счётчика CounterAPI -->
     <script>
-        // Настройки вашего счётчика на CounterAPI
         const TEAM_SLUG = 'skymonders-team-3191';
         const COUNTER_SLUG = 'skyos';
-
         const GET_URL = `https://api.counterapi.dev/v1/${TEAM_SLUG}/${COUNTER_SLUG}`;
         const UP_URL = `https://api.counterapi.dev/v1/${TEAM_SLUG}/${COUNTER_SLUG}/up`;
 
-        // Функция получения текущего значения
         async function getCount() {
             try {
                 const response = await fetch(GET_URL);
@@ -502,13 +500,11 @@
                 localStorage.setItem('skyos_counter', data.count);
             } catch (e) {
                 console.error('Ошибка получения счётчика:', e);
-                // Запасной вариант: берём из localStorage
                 const local = localStorage.getItem('skyos_counter');
                 document.getElementById('download-counter').textContent = local || '0';
             }
         }
 
-        // Функция увеличения счётчика
         async function incrementCount() {
             try {
                 const response = await fetch(UP_URL, { method: 'POST' });
@@ -518,7 +514,6 @@
                 localStorage.setItem('skyos_counter', data.count);
             } catch (e) {
                 console.error('Ошибка увеличения счётчика:', e);
-                // Если API недоступно, увеличиваем локально
                 let current = parseInt(document.getElementById('download-counter').textContent) || 0;
                 current++;
                 document.getElementById('download-counter').textContent = current;
@@ -526,10 +521,7 @@
             }
         }
 
-        // При загрузке страницы получаем текущее значение
         getCount();
-
-        // При клике на кнопку скачивания увеличиваем счётчик
         document.getElementById('download-link').addEventListener('click', function(e) {
             setTimeout(incrementCount, 500);
         });
