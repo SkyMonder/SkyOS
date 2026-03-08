@@ -392,10 +392,57 @@
         </div>
 
         <!-- Счётчик скачиваний (облачный) -->
+        <!-- Счётчик скачиваний (через CounterAPI) -->
         <div class="counter-block">
             <span class="counter-text">⬇️ Всего скачиваний SkyOS:</span>
-            <span class="counter-number" id="download-counter">...</span>
+            <span class="counter-number" id="download-counter">0</span>
         </div>
+        
+        <script>
+        // Используем бесплатный CounterAPI
+        const COUNTER_NAME = 'skyos-downloads'; // уникальное имя счётчика
+        
+        // Функция получения текущего значения
+        async function getCount() {
+            try {
+                const response = await fetch(`https://api.counterapi.dev/v1/${COUNTER_NAME}`);
+                const data = await response.json();
+                document.getElementById('download-counter').textContent = data.count;
+            } catch (e) {
+                console.error('Ошибка получения счётчика:', e);
+                // Если API недоступно, показываем последнее известное значение из localStorage
+                const local = localStorage.getItem('skyos_counter');
+                document.getElementById('download-counter').textContent = local || '0';
+            }
+        }
+        
+        // Функция увеличения счётчика
+        async function incrementCount() {
+            try {
+                const response = await fetch(`https://api.counterapi.dev/v1/${COUNTER_NAME}/up`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                document.getElementById('download-counter').textContent = data.count;
+                localStorage.setItem('skyos_counter', data.count); // сохраняем локально на всякий случай
+            } catch (e) {
+                console.error('Ошибка увеличения счётчика:', e);
+                // Резерв: увеличиваем локально
+                let current = parseInt(document.getElementById('download-counter').textContent) || 0;
+                current++;
+                document.getElementById('download-counter').textContent = current;
+                localStorage.setItem('skyos_counter', current);
+            }
+        }
+        
+        // При загрузке страницы получаем текущее значение
+        getCount();
+        
+        // При клике на кнопку скачивания увеличиваем счётчик
+        document.getElementById('download-link').addEventListener('click', function(e) {
+            setTimeout(incrementCount, 500); // небольшая задержка, чтобы не мешать скачиванию
+        });
+        </script>
 
         <div class="download-section">
             <div class="version-info">
